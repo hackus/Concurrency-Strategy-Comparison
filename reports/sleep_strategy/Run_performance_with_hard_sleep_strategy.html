@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thread Sleep Strategy Performance Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #fafafa; }
+        table { border-collapse: collapse; width: 100%; max-width: 900px; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #0078D7; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        h1 { color: #0078D7; }
+        footer { margin-top: 20px; color: #555; font-size: 0.9em; }
+        .slow { color: #b30000; font-weight: bold; }
+        .fast { color: #007800; font-weight: bold; }
+        .pass { background: #eaffea; }      /* light green */
+        .fail { background: #ffeaea; }      /* light red */
+        .error-msg { color: #b30000; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>🧭 Thread Sleep Strategy Performance Report</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Strategy</th>
+                <th>Duration (ms)</th>
+                <th>Relative Speed</th>
+                <th>Status</th>
+                <th>Error Message</th>
+            </tr>
+        </thead>
+        <tbody>
+<tr class='pass'><td>VirtualThreadDemo</td><td>1084</td><td class='fast'>1.00x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>CompletableFutureExecutorService1000ThreadsDemo</td><td>1097</td><td class='fast'>1.01x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>FutureExecutorService1000ThreadsDemo</td><td>1121</td><td class='fast'>1.03x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>ReactiveRxJavaDemo</td><td>8291</td><td class='slow'>7.65x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>ReactiveReactorDemo</td><td>10675</td><td class='slow'>9.85x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>ReactiveReactorParallelDemo</td><td>85546</td><td class='slow'>78.92x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>ReactiveRxJavaParallelDemo</td><td>85591</td><td class='slow'>78.96x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>CompletableFutureExecutorServiceThreadsDemo</td><td>85662</td><td class='slow'>79.02x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>FutureExecutorServiceDemo</td><td>85725</td><td class='slow'>79.08x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>FutureCommonPoolDemo</td><td>90879</td><td class='slow'>83.84x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+<tr class='pass'><td>CompletableFutureDefaultDemo</td><td>92980</td><td class='slow'>85.77x</td><td>✅ Pass</td><td class='error-msg'></td></tr>
+        </tbody>
+    </table>
+    <p><strong>Best:</strong> 1084 ms</p>
+    <footer>Generated on 2025-11-09 17:52:17</footer>
+</body>
+</html>

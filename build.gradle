@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.creativecoders'
+version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+
+application {
+    mainClass = 'com.example.futuretest.Main'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+    implementation 'com.h2database:h2:2.3.232'
+
+    // Reactive
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.8'
+    implementation 'io.projectreactor:reactor-core:3.6.6'
+
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1'
+
+    implementation platform('com.fasterxml.jackson:jackson-bom:2.17.2')
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+
+    // Cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.18.1'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.18.1'
+
+    // Reporting
+    implementation 'com.aventstack:extentreports:5.1.1' // if not already there
+
+    // Logging
+    testImplementation 'org.slf4j:slf4j-simple:2.0.16'
+    
+    testImplementation 'org.junit.platform:junit-platform-suite:1.11.3'
+    testImplementation 'org.slf4j:slf4j-simple:2.0.16'
+
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation 'org.apache.pdfbox:pdfbox:2.0.30'
+}
+
+test {
+    useJUnitPlatform()
+}

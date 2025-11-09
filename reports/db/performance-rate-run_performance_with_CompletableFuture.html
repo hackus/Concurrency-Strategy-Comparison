@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8"/>
+  <title>DB Operation Rates per Second</title>
+  <style>body{font-family:Arial;padding:16px}.container{max-width:1100px;margin:0 auto}</style>
+</head><body>
+  <div class="container">
+    <h2>Operation Success/Failure Rate per Second</h2>
+    <canvas id="rateChart" width="1000" height="420"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const labels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40];
+    new Chart(document.getElementById('rateChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label:'Insert-Success', data:[0,200,400,600,800,1000,1513,1087,1600,1800,0,2000,0,0,2000,1103,897,0,1998,2,0,0,0,0,2000,0,517,715,768,0,2000,0,0,0,0,2000,0,0,0,0,2000], borderColor:'green', fill:false },
+          { label:'Insert-Fail',    data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], borderColor:'darkred', fill:false },
+          { label:'Update-Success', data:[0,200,400,600,800,1000,1200,1400,1600,1785,413,1602,204,1294,502,180,1290,530,31,1073,896,0,495,1101,404,0,484,955,561,0,178,858,872,92,0,491,832,677,0,0,551], borderColor:'blue', fill:false },
+          { label:'Update-Fail',    data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], borderColor:'red', fill:false },
+          { label:'Select-Success', data:[0,200,400,600,800,1000,1200,1400,1178,422,1800,380,1620,0,710,1290,0,748,1252,0,266,1128,606,0,456,1029,515,0,354,943,703,0,0,795,874,331,0,146,815,858,181], borderColor:'orange', fill:false },
+          { label:'Select-Fail',    data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], borderColor:'brown', fill:false }
+        ]
+      },
+      options:{
+        responsive:true,
+        interaction:{mode:'index',intersect:false},
+        plugins:{title:{display:true,text:'DB Ops per-Second Rate'}},
+        scales:{y:{beginAtZero:true,title:{display:true,text:'Ops/sec'}}}
+      }
+    });
+  </script>
+</body></html>

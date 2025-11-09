@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Combined Operation Latency</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 16px; }
+    .container { max-width: 980px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Average Operation Latency (ms) per Second</h2>
+    <canvas id="latencyChart" width="900" height="420"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('latencyChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ["0s","1s","2s","3s","4s","5s","6s","7s","8s","9s","10s","11s","12s","13s","14s","15s","16s","17s","18s","19s","20s","21s","22s","23s","24s","25s","26s","27s","28s","29s","30s","31s","32s","33s","34s","35s","36s","37s","38s","39s"],
+        datasets: [
+          {
+            label: 'Insert Latency (ms)',
+            data: [7.874,1.716,1.134,1.466,1.851,3.932,2.184,2.531,12.948,17.903,6.959,20.847,17.079,13.700,13.417,12.494,11.509,13.095,13.478,13.392,13.650,19.836,14.032,10.022,15.113,12.793,21.456,11.879,14.382,8.772,14.848,12.397,13.170,9.342,9.072,6.200,2.380,1.709,0.658,0.000],
+            borderColor: 'rgba(54,162,235,1)',
+            backgroundColor: 'rgba(54,162,235,0.2)',
+            fill: false,
+            tension: 0.2
+          },
+          {
+            label: 'Update Latency (ms)',
+            data: [8.872,0.187,0.257,0.369,0.430,0.809,1.031,1.391,1.815,2.643,2.347,3.025,3.072,3.436,3.609,3.946,4.325,4.505,5.287,5.227,5.477,6.078,6.218,6.386,6.876,7.229,8.055,7.644,8.367,8.711,8.496,8.702,9.146,9.048,9.468,9.176,9.416,9.346,9.107,8.614],
+            borderColor: 'rgba(255,206,86,1)',
+            backgroundColor: 'rgba(255,206,86,0.2)',
+            fill: false,
+            tension: 0.2
+          },
+          {
+            label: 'Select Latency (ms)',
+            data: [8.839,0.313,0.278,0.366,0.431,0.821,1.048,1.353,1.653,2.420,2.314,2.952,3.023,3.441,3.612,3.996,4.224,4.705,5.131,5.195,5.543,6.003,6.170,6.468,6.773,7.189,8.331,7.662,8.412,8.352,8.605,8.968,9.048,9.229,9.489,9.279,9.376,9.230,9.177,9.297],
+            borderColor: 'rgba(75,192,192,1)',
+            backgroundColor: 'rgba(75,192,192,0.2)',
+            fill: false,
+            tension: 0.2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Average Latency per Operation'
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: item => `${item.dataset.label}: ${item.formattedValue} ms`
+            }
+          },
+          legend: { position: 'top' }
+        },
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: 'Latency (ms)' } },
+          x: { title: { display: true, text: 'Time (seconds)' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

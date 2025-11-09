@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>DB Performance Summary</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 16px; }
+    .container { max-width: 980px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>DB Operation Success / Fail Count</h2>
+    <canvas id="bar" width="900" height="380"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('bar').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['INSERT', 'UPDATE', 'SELECT'],
+        datasets: [
+          {
+            label: 'Succeeded',
+            data: [60000, 60000, 60000],
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Failed',
+            data: [0, 0, 0],
+            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'DB Operation Summary'
+          },
+          tooltip: {
+            mode: 'index',       // show all datasets for same index
+            intersect: false,    // hover anywhere near the group
+            callbacks: {
+              title: (items) => items[0].label,
+              label: (item) => {
+                const label = item.dataset.label;
+                const value = item.formattedValue;
+                const symbol = label === 'Succeeded' ? '✓' : '✗';
+                return `${symbol} ${label}: ${value}`;
+              }
+            }
+          },
+          legend: { position: 'top' }
+        },
+        scales: {
+          x: { stacked: false },
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

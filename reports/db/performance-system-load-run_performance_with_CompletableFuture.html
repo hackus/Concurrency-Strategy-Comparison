@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>System Load Time Series</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 16px; }
+    .container { max-width: 980px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>System / JVM CPU and Memory Load Over Time</h2>
+    <canvas id="loadChart" width="900" height="400"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('loadChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ["0s","1s","2s","3s","4s","5s","6s","7s","8s","9s","10s","11s","12s","13s","14s","15s","16s","17s","18s","19s","20s","21s","22s","23s","24s","25s","26s","27s","28s","29s","30s","31s","32s","33s","34s","35s","36s","37s","38s","39s","40s"],
+        datasets: [
+          {
+            label: 'System CPU (%%)',
+            data: [96.27,68.02,66.22,54.18,64.76,71.99,63.60,81.16,82.39,82.99,83.55,83.35,83.31,83.56,83.15,95.96,86.86,83.52,83.22,83.40,83.34,83.04,83.63,83.14,83.23,83.44,83.14,83.50,83.32,82.74,83.49,83.34,83.43,84.73,82.57,83.34,83.44,83.21,83.34,83.99,84.72],
+            borderColor: 'orange',
+            backgroundColor: 'rgba(255,165,0,0.3)',
+            fill: false,
+            tension: 0.2
+          },
+          {
+            label: 'JVM CPU (%%)',
+            data: [55.16,12.47,8.96,9.93,24.23,24.15,37.77,51.94,58.90,61.91,65.35,63.94,66.93,44.55,57.02,73.28,68.69,65.69,67.75,64.09,69.21,67.88,65.95,63.80,59.00,65.86,69.47,67.41,65.70,69.99,65.60,65.14,72.50,71.37,69.52,65.27,71.93,69.65,69.19,70.54,66.28],
+            borderColor: 'red',
+            backgroundColor: 'rgba(255,0,0,0.3)',
+            fill: false,
+            tension: 0.2
+          },
+          {
+            label: 'Memory Load (%%)',
+            data: [62.33,67.67,47.35,75.33,26.45,60.05,24.75,57.65,58.98,44.02,38.64,47.55,57.90,34.35,49.25,70.07,52.00,55.75,48.18,62.59,54.19,39.70,34.91,25.26,45.88,42.73,46.09,55.22,39.18,31.20,39.77,41.78,58.13,28.55,49.54,59.24,28.69,50.23,68.31,43.42,45.14],
+            borderColor: 'green',
+            backgroundColor: 'rgba(0,128,0,0.3)',
+            fill: false,
+            tension: 0.2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: { display: true, text: 'System Load (%%) Over Time' },
+          legend: { position: 'top' },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              title: items => `Time: ${items[0].label}`,
+              label: item => `${item.dataset.label}: ${item.formattedValue}%%`
+            }
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, max: 100 },
+          x: { title: { display: true, text: 'Time (seconds)' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

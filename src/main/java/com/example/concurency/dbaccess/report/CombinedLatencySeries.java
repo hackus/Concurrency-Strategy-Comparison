@@ -50,7 +50,6 @@ public class CombinedLatencySeries {
         return new CombinedLatencies(seconds, insert, update, select);
     }
 
-
     public record CombinedLatencies(List<Long> seconds, List<Double> insert, List<Double> update, List<Double> select) {
     }
 

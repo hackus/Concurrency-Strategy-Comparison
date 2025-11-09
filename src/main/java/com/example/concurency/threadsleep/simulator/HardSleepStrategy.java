@@ -1,6 +1,5 @@
 package com.example.concurency.threadsleep.simulator;
 
-// 2️⃣ Concrete strategy: Hard sleep
 public class HardSleepStrategy implements WorkStrategy {
     @Override
     public String doWork(int id, int millis) {

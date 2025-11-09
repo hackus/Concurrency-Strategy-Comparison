@@ -85,12 +85,6 @@ public class CompletableFuturePdfReaderNonBlockingDemo {
 
         }, pool).whenComplete((r, ex) -> pool.shutdown());
 
-//        try {
-//            doc.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
         return result;
     }
 }

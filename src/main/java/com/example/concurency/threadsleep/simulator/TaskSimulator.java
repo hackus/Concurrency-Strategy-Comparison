@@ -1,6 +1,5 @@
 package com.example.concurency.threadsleep.simulator;
 
-// 4️⃣ Context class
 public class TaskSimulator {
     private final WorkStrategy strategy;
 

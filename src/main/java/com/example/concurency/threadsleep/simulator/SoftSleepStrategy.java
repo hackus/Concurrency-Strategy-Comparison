@@ -6,7 +6,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-// 3️⃣ Concrete strategy: Soft (no sleep)
 public class SoftSleepStrategy implements WorkStrategy {
 
     private final static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();

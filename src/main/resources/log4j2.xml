@@ -22,7 +22,7 @@
 
     <Loggers>
         <!-- Application package -->
-        <Logger name="com.example.concurency" level="info" additivity="false">
+        <Logger name="com.example.concurrency" level="info" additivity="false">
             <AppenderRef ref="AsyncConsole"/>
             <AppenderRef ref="AsyncFile"/>
         </Logger>

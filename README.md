@@ -57,7 +57,7 @@ Spawning empty threads should not be a problem in any language. Naturally, as th
 
 That said, I’m somewhat skeptical of Java’s virtual threads for similar reasons. Still, when used for local computations that don’t involve third-party interactions, virtual threads perform impressively well. This somewhat contrasts with Erlang’s use of the Actor model, which is deeply embedded in the language. Erlang itself is probably not a bad language — its decline in popularity may have more to do with its steep learning curve and functional programming complexity than with its technical capabilities.
 
-As for stability it was interesting to observe how stable the ReactiveRx rate chart is as opposed to CompletableFuture and VirtualThreads rate chart when testing how each solution behaves while communicating with third party services.
+As for stability it was interesting to observe how stable the ReactiveRx rate chart is as opposed to CompletableFuture and VirtualThreads when testing how each solution behaves while communicating with third party services.
 
 [VirtualThreads rate Chart →](reports/db/performance-rate-run_performance_with_VirtualThreads.html)
 

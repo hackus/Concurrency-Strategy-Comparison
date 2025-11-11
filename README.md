@@ -123,6 +123,15 @@ For DB values taken are max between insert, update and delete.
 ## 🧱 Project Structure
 
 ```
+reports/
+├── db/
+│   ├── ...
+│   └── performance-report.html
+├── pdf_reader/
+│   └── pdf_reader_report.html
+├── sleep_strategy/
+│   ├── Run_performance_with_hard_sleep_strategy.html
+│   └── Run_performance_with_soft_sleep_strategy.html
 src/main/java/com/example/concurency/
 ├── pdfreader/
 │   └── ... reader implementation

@@ -3,18 +3,13 @@ plugins {
     id 'application'
 }
 
-group = 'com.creativecoders'
+group = 'com.example.concurrency'
 version = '1.0-SNAPSHOT'
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
-}
-
-
-application {
-    mainClass = 'com.example.futuretest.Main'
 }
 
 repositories {

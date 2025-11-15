@@ -116,13 +116,14 @@ That said, ZIO and Cats Effect are far more debuggable, while debugging RxJava r
 
 
 ## 🧩 Concurrency Models Compared
+
 | Model                 | Description                                                       | Characteristics                                                                                                    | Ideal Use Case                                    |
 |-----------------------|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
 | **Future**            | Introduced in Java 5 as a simple handle for asynchronous results. | - Blocking `get()`<br>- No composition<br>- Minimal control                                                        | Simple async tasks                                |
 | **CompletableFuture** | Java 8 extension with fluent composition and chaining.            | - Non-blocking<br>- Custom executors<br>- Functional style                                                         | Parallel pipelines, async composition             |
 | **Virtual Threads**   | Java 21 (Project Loom) — lightweight threads managed by JVM.      | - Thousands of threads<br>- Natural blocking style<br>- Minimal boilerplate                                        | Highly concurrent I/O workloads                   |
 | **Reactive RxJava**   | Reactive Extensions for Java (library-based).                     | - Push-based async streams<br>- Non-blocking<br>- Fine control over backpressure                                   | Reactive APIs, high-frequency data streams        |
-| **Reactive Reactor**  | Core reactive engine from Spring ecosystem.                       | - Non-blocking `Mono` / `Flux` types<br>- Integrated with Spring WebFlux<br>- Efficient context propagation        | Microservices, reactive APIs, streaming pipelines |
+| **Reactive Reactor**  | Core reactive engine from Spring ecosystem.                       | - Non-blocking `Mono` / `Flux` types<br>- Natively integrated in Spring WebFlux<br>- Efficient context propagation | Microservices, reactive APIs, streaming pipelines |
 | **ZIO**               | Scala effect system with typed errors and structured concurrency.  | - Typed effects<br>- Fibers and schedulers<br>- Safe resource management<br>- Unified concurrency primitives       | Functional systems requiring strong safety        |
 | **Cats Effect**       | Scala concurrency runtime built around the `IO` effect type.      | - Fiber runtime<br>- Pure functional IO<br>- Deterministic concurrency<br>- Works with FS2 for streaming           | Functional IO workloads, controlled parallelism   |
 

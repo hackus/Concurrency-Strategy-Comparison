@@ -38,7 +38,10 @@ I was curious whether I could test Scala in the same way — and it turns out I 
 I should mention that the code was generated with ChatGPT’s help; I don’t yet have enough experience with ZIO or Cats Effect to write it entirely on my own.
 If anyone is able to improve it, you’re more than welcome to jump in.
 
-I had to separate ZIO and Cats Effect runs as I observed ZIO interfered into Cats Effect and was deteriorating both statistics. Now I am running them separately until I will find a solution for it. 
+`I had to separate ZIO and Cats Effect runs as I observed ZIO interfered into Cats Effect and was deteriorating both statistics. Now I am running them separately until I will find a solution for it. `
+
+**I resolved the issue described above, and it noticeably changed ZIO’s behavior. Before the fix, ZIO behaved similarly to Java’s CompletableFuture—just slower. After the correction, it behaves more like RxJava in a point-to-point execution style.
+I also observed that Cats Effect either lacks effective backpressure or it handles it inefficiently, resulting in behavior closer to Java Virtual Threads, but with lower performance.**
 
 Each model runs identical workloads — such as database I/O, PDF parsing, and simulated thread-sleep tasks — to compare performance, scalability, and development complexity.
 The goal is to understand trade-offs between simplicity, control, and scalability — and to help developers choose the right concurrency tool for their workload.
@@ -113,15 +116,8 @@ That said, ZIO and Cats Effect are far more debuggable, while debugging RxJava r
 [Task simulator hard sleep report →](reports/sleep_strategy/Run_performance_with_hard_sleep_strategy.html)
 [Task simulator soft sleep report →](reports/sleep_strategy/Run_performance_with_soft_sleep_strategy.html)
 
-## 📉 Full ZIO Effect report
-[ZIO full report →](reports/db/zio/performance-report.html)
-
-## 📉 Full Cats Effect report
-[Cats effect full report →](reports/db/cats/performance-report.html)
-
 ## Project link
 [Here →](https://github.com/hackus/ConcurencyStrategyComparison)
-
 
 ## 🧩 Concurrency Models Compared
 

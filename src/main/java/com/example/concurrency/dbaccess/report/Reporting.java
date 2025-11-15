@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.nio.file.Path;
 
 import static com.example.concurrency.dbaccess.report.ReportHelper.computeDeltas;
 
@@ -19,6 +20,7 @@ import static com.example.concurrency.dbaccess.report.ReportHelper.computeDeltas
 @RequiredArgsConstructor
 public class Reporting {
     private static ExtentReports extent;
+    private static String mainPath;
 
     private static void startExtentReports(String reportPath) {
         if (extent == null) {
@@ -27,6 +29,7 @@ public class Reporting {
                     ExtentSparkReporter spark = new ExtentSparkReporter(reportPath + "/performance-report.html");
                     extent = new ExtentReports();
                     extent.attachReporter(spark);
+                    mainPath = reportPath;
                 }
             }
         }
@@ -48,6 +51,12 @@ public class Reporting {
     // add this overload (keep your old generateReport(...) if needed elsewhere)
     public void startTest(String normalizedTestName, String testName) {
         testMap.put(normalizedTestName, extent.createTest(testName));
+    }
+
+    public String relativeToMain(String mainPath, String execPath) {
+        Path base = Path.of(mainPath).normalize().toAbsolutePath();
+        Path full = Path.of(execPath).normalize().toAbsolutePath();
+        return base.relativize(full).toString();
     }
 
     public void writeReport(
@@ -78,6 +87,8 @@ public class Reporting {
         // Write both files
 //        java.nio.file.Path dir = java.nio.file.Path.of("/reports/db");
         java.nio.file.Path dir = java.nio.file.Path.of(reportPath);
+
+        String relativePath = relativeToMain(mainPath, reportPath);
         try {
             java.nio.file.Files.createDirectories(dir);
             java.nio.file.Files.writeString(dir.resolve(performanceChartName), summaryHtml, java.nio.charset.StandardCharsets.UTF_8);
@@ -138,11 +149,11 @@ public class Reporting {
             """;
 
         links = links.replace("${testName}", testName)
-            .replace("${chart1}", performanceChartName)
-            .replace("${chart2}", performanceTimelineChartName)
-            .replace("${chart3}", performanceRateChartName)
-            .replace("${chart4}", performanceSystemLoadChartName)
-            .replace("${chart5}", performanceLatencyChartName);
+            .replace("${chart1}", (relativePath.isEmpty() ? "" : (relativePath + "/")) + performanceChartName)
+            .replace("${chart2}", (relativePath.isEmpty() ? "" : (relativePath + "/")) + performanceTimelineChartName)
+            .replace("${chart3}", (relativePath.isEmpty() ? "" : (relativePath + "/")) + performanceRateChartName)
+            .replace("${chart4}", (relativePath.isEmpty() ? "" : (relativePath + "/")) + performanceSystemLoadChartName)
+            .replace("${chart5}", (relativePath.isEmpty() ? "" : (relativePath + "/")) + performanceLatencyChartName);
 
         var test = testMap.get(testName);
         test.info(links);

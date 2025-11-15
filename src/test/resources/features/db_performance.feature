@@ -9,7 +9,9 @@ Feature: Database performance testing
     And the average select response time should be under <select_latency> ms and percentage of failed less than <failed_percentage> percent
 
     Examples:
-      | strategy                | insert_latency | update_latency | select_latency | failed_percentage | report_path    |
-      | VirtualThreads          | 200            | 1000           | 700            | 0.02              | "./reports/db" |
-      | CompletableFuture       | 200            | 1000           | 700            | 0.02              | "./reports/db" |
-      | ReactiveRxJavaDBManager | 200            | 1000           | 700            | 0.02              | "./reports/db" |
+      | strategy                | insert_latency | update_latency | select_latency | failed_percentage | report_path         |
+      | VirtualThreads          | 200            | 1000           | 700            | 0.02              | "./reports/db"      |
+      | CompletableFuture       | 200            | 1000           | 700            | 0.02              | "./reports/db"      |
+      | ReactiveRxJavaDBManager | 200            | 1000           | 700            | 0.02              | "./reports/db"      |
+      | ZioDBManager            | 200            | 1000           | 700            | 0.02              | "./reports/db/zio"  |
+      | CatsDBManager           | 200            | 1000           | 700            | 0.02              | "./reports/db/cats" |

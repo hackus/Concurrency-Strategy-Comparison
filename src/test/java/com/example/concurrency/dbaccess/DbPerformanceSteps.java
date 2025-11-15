@@ -32,6 +32,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.example.concurrency.dbaccess.ZioDBManager;
+import com.example.concurrency.dbaccess.CatsDBManager;
+
 @Slf4j
 public class DbPerformanceSteps {
 
@@ -43,12 +46,14 @@ public class DbPerformanceSteps {
     Sampler sampler;
     String normalizedTestName;
 
-    @ParameterType("hikari|CompletableFuture|VirtualThreads|ReactiveRxJavaDBManager|custom")
+    @ParameterType("hikari|CompletableFuture|VirtualThreads|ReactiveRxJavaDBManager|ZioDBManager|CatsDBManager|custom")
     public Class<? extends DBManager> dbManager(String name) {
         return switch (name) {
             case "CompletableFuture" -> CompletableFuture.class;
             case "VirtualThreads" -> VirtualThreads.class;
             case "ReactiveRxJavaDBManager" -> ReactiveRxJavaDBManager.class;
+            case "ZioDBManager" -> ZioDBManager.class;
+            case "CatsDBManager" -> CatsDBManager.class;
             default -> throw new IllegalArgumentException("Unknown DBManager strategy: " + name);
         };
     }

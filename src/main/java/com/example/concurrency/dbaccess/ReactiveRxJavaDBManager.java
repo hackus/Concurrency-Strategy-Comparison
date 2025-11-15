@@ -13,7 +13,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @Slf4j
-@RequiredArgsConstructor
 public class ReactiveRxJavaDBManager implements DBManager {
 
     private final int THREADS = Runtime.getRuntime().availableProcessors();

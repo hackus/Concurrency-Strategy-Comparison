@@ -29,8 +29,19 @@ solution can then be chosen based on the gathered statistics.
 
 ### Reactive Reactor — the foundation of Spring WebFlux and modern reactive microservices.
 
+#### Cherry on top
+
+### ZIO — a Scala library that provides a typed effect system with structured concurrency, fibers, and safe resource management.
+### Cats Effect — a Scala library offering a functional IO type and a fiber-based concurrency runtime.
+
+I was curious whether I could test Scala in the same way — and it turns out I can. So I used two well-known Scala frameworks that resemble Java’s reactive style and tried it out.
+I should mention that the code was generated with ChatGPT’s help; I don’t yet have enough experience with ZIO or Cats Effect to write it entirely on my own.
+If anyone is able to improve it, you’re more than welcome to jump in.
+
 Each model runs identical workloads — such as database I/O, PDF parsing, and simulated thread-sleep tasks — to compare performance, scalability, and development complexity.
 The goal is to understand trade-offs between simplicity, control, and scalability — and to help developers choose the right concurrency tool for their workload.
+
+For Cats Effect and ZIO I just run the db interaction test.  
 
 ## 🚀 Analysis
 
@@ -73,6 +84,23 @@ The chaotic behavior of virtual threads becomes immediately apparent in the char
 
 [ReactiveRx pass rate →](reports/db/performance-chart-run_performance_with_ReactiveRxJavaDBManager.html)
 
+Regarding ZIO and Cats Effect: both behaved stably with no failures. Cats Effect was slower than ZIO, and both were slower than RxJava and CompletableFuture.
+
+ZIO appears well-balanced—likely using a round-robin–like scheduling approach where the slowest fiber can influence the overall throughput.
+Cats Effect, on the other hand, seems to struggle toward the end of the run.
+
+[ZIO latency →](reports/db/performance-latencyrun_performance_with_ZioDBManager.html)
+
+[Cats Effect latency →](reports/db/performance-latencyrun_performance_with_CatsDBManager.html)
+
+So, contrary to common expectations, the “million fibers” capability in Scala doesn’t necessarily translate into superior performance. In my tests, neither ZIO nor Cats Effect outperformed RxJava. It feels like a significant portion of CPU time goes into state checking rather than executing the actual tasks.
+
+That said, ZIO and Cats Effect are far more debuggable, while debugging RxJava remains notoriously difficult.
+
+[ZIO pass rate →](reports/db/performance-chart-run_performance_with_ZioDBManager.html)
+
+[Cats Effect pass rate →](reports/db/performance-chart-run_performance_with_CatsDBManager.html)
+
 ## 📉 Full report for db access
 [DB performance full report →](reports/db/performance-report.html)
 
@@ -88,37 +116,42 @@ The chaotic behavior of virtual threads becomes immediately apparent in the char
 
 
 ## 🧩 Concurrency Models Compared
-
 | Model                 | Description                                                       | Characteristics                                                                                                    | Ideal Use Case                                    |
 |-----------------------|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
 | **Future**            | Introduced in Java 5 as a simple handle for asynchronous results. | - Blocking `get()`<br>- No composition<br>- Minimal control                                                        | Simple async tasks                                |
 | **CompletableFuture** | Java 8 extension with fluent composition and chaining.            | - Non-blocking<br>- Custom executors<br>- Functional style                                                         | Parallel pipelines, async composition             |
 | **Virtual Threads**   | Java 21 (Project Loom) — lightweight threads managed by JVM.      | - Thousands of threads<br>- Natural blocking style<br>- Minimal boilerplate                                        | Highly concurrent I/O workloads                   |
 | **Reactive RxJava**   | Reactive Extensions for Java (library-based).                     | - Push-based async streams<br>- Non-blocking<br>- Fine control over backpressure                                   | Reactive APIs, high-frequency data streams        |
-| **Reactive Reactor**  | Core reactive engine from Spring ecosystem.                       | - Non-blocking `Mono` / `Flux` types<br>- Natively integrated in Spring WebFlux<br>- Efficient context propagation | Microservices, reactive APIs, streaming pipelines |
+| **Reactive Reactor**  | Core reactive engine from Spring ecosystem.                       | - Non-blocking `Mono` / `Flux` types<br>- Integrated with Spring WebFlux<br>- Efficient context propagation        | Microservices, reactive APIs, streaming pipelines |
+| **ZIO**               | Scala effect system with typed errors and structured concurrency.  | - Typed effects<br>- Fibers and schedulers<br>- Safe resource management<br>- Unified concurrency primitives       | Functional systems requiring strong safety        |
+| **Cats Effect**       | Scala concurrency runtime built around the `IO` effect type.      | - Fiber runtime<br>- Pure functional IO<br>- Deterministic concurrency<br>- Works with FS2 for streaming           | Functional IO workloads, controlled parallelism   |
 
 ## 📊 Performance Observations
 
-| Metric                          | Future               | CompletableFuture     | Virtual Threads               | RxJava                        | Reactor                       |
-|---------------------------------|----------------------|-----------------------|-------------------------------|-------------------------------|-------------------------------|
-| **Blocking Tasks**              | ❌ Thread-limited     | ⚠️ Pool-bound         | ✅ Excellent                   | ✅ Excellent                   | ✅ Excellent                   |
-| **Composition / Chaining**      | ❌ None               | ✅ Fluent              | ⚠️ Sequential only            | ✅ Powerful                    | ✅ Powerful                    |
-| **Backpressure / Flow Control** | ❌                    | ❌                     | ❌                             | ✅ Yes                         | ✅ Yes                         |
-| **Ease of Debugging**           | ✅ Simple             | ⚠️ Moderate           | ✅ Familiar                    | ⚠️ Complex                    | ⚠️ Complex                    |
-| **Throughput (I/O-bound)**      | Very High/Low/Medium | Very High/High/Medium | Very High/Medium              | Very High/Medium/Low/Very Low | Very High/Medium/Low/Very Low |
-| **Thread Management**           | Manual               | Configurable          | Implicit, lightweight         | Managed                       | Managed                       |
-| **Best for**                    | Simple async         | Chained async ops     | Blocking-style concurrent I/O | Event-driven data flows       | WebFlux, reactive pipelines   |
+| Metric                          | Future               | CompletableFuture     | Virtual Threads               | RxJava                        | Reactor                       | ZIO                                          | Cats Effect                                  |
+|---------------------------------|----------------------|-----------------------|-------------------------------|-------------------------------|-------------------------------|----------------------------------------------|-----------------------------------------------|
+| **Blocking Tasks**              | ❌ Thread-limited     | ⚠️ Pool-bound         | ✅ Excellent                   | ✅ Excellent                   | ✅ Excellent                   | ⚠️ Via `ZIO.blocking`                        | ⚠️ Via `IO.blocking`                          |
+| **Composition / Chaining**      | ❌ None               | ✅ Fluent              | ⚠️ Sequential only            | ✅ Powerful                    | ✅ Powerful                    | ✅ Strong (ZIO combinators)                  | ✅ Strong (IO combinators)                    |
+| **Backpressure / Flow Control** | ❌                    | ❌                     | ❌                             | ✅ Yes                         | ✅ Yes                         | ⚠️ Via ZStream (optional)                   | ⚠️ Via FS2 (optional)                        |
+| **Ease of Debugging**           | ✅ Simple             | ⚠️ Moderate           | ✅ Familiar                    | ⚠️ Complex                    | ⚠️ Complex                    | ⚠️ Moderate (fiber-based)                   | ⚠️ Moderate (fiber-based)                    |
+| **Throughput (I/O-bound)**      | Very High/Low/Medium | Very High/High/Medium | Very High/Medium              | Very High/Medium/Low/Very Low | Very High/Medium/Low/Very Low | Very High (fiber scheduler)                 | Very High (fiber scheduler)                  |
+| **Thread Management**           | Manual               | Configurable          | Implicit, lightweight         | Managed                       | Managed                       | Managed fiber runtime                        | Managed fiber runtime                         |
+| **Best for**                    | Simple async         | Chained async ops     | Blocking-style concurrent I/O | Event-driven data flows       | WebFlux, reactive pipelines   | Typed effects, structured concurrency        | Functional IO, controlled parallelism         |
 
-## 🧮 Benchmark Summary
-
-| Test                          | Future  | CompletableFuture | Virtual Threads | RxJava   | Reactor  |
-|-------------------------------|---------|-------------------|-----------------|----------|----------|
-| 🧠 TaskSimulator (1000 tasks) | 1121 ms | 1097 ms           | 1084 ms         | 8291 ms  | 10675 ms |
-| 📄 PDF Reader (multi-page)    | 3101 ms | 1509 ms           | 1524 ms         | 1885 ms  | N/A      |
-| 🗄️ DB  (HikariCP)            | N/A     | ~25000 ms         | ~24000 ms       | 10000 ms | N/A      |
+## 🧮 Max average latency benchmark Summary
+| Test                          | Future  | CompletableFuture | Virtual Threads | RxJava  | Reactor  | ZIO  | Cats Effect |
+|-------------------------------|---------|---------------|-----------------|---------|----------|------|-------------|
+| 🧠 TaskSimulator (1000 tasks) | 1121 ms | 1097 ms       | 1084 ms         | 8291 ms | 10675 ms | N/A  | N/A         |
+| 📄 PDF Reader (multi-page)    | 3101 ms | 1509 ms       | 1524 ms         | 1885 ms | N/A      | N/A  | N/A         |
+| 🗄️ DB  (HikariCP)            | N/A     | ~21 ms        | ~18177 ms       | 8 ms | N/A      | 5583 | 56733       |
 
 For the TaskSimulator Future's and CompletableFuture's values are taken from the tuned implementations.
 For DB values taken are max between insert, update and delete.
+
+### My opinion
+
+I don’t yet have enough experience to make a definitive comparison, but so far RxJava feels noticeably more complex than ZIO or Cats Effect—although also significantly faster.
+That said, in my personal opinion, nothing compares to Completable Future.
 
 ## 🧱 Project Structure
 
@@ -137,6 +170,9 @@ src/main/java/com/example/concurency/
 │   └── ... reader implementation
 ├── threadsleep/
 │   └── ... simulate task with thread sleep
+├── dbaccess/
+│   └── ... third party communication
+src/main/scala/com/example/concurency/
 ├── dbaccess/
 │   └── ... third party communication
 src/test/java/com/example/concurency/

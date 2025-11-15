@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8"/>
+  <title>DB Operation Rates per Second</title>
+  <style>body{font-family:Arial;padding:16px}.container{max-width:1100px;margin:0 auto}</style>
+</head><body>
+  <div class="container">
+    <h2>Operation Success/Failure Rate per Second</h2>
+    <canvas id="rateChart" width="1000" height="420"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const labels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41];
+    new Chart(document.getElementById('rateChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label:'Insert-Success', data:[0,200,400,600,800,1000,53,1763,268,857,1175,270,91,140,957,77,1114,39,15,1,0,142,216,3,122,630,6,0,7,0,271,0,92,0,0,0,497,0,40,4,46,18], borderColor:'green', fill:false },
+          { label:'Insert-Fail',    data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], borderColor:'darkred', fill:false },
+          { label:'Update-Success', data:[0,200,400,600,800,1000,0,830,802,585,22,319,26,11,168,34,17,2,149,2,0,19,58,0,271,0,2,0,2,0,11,0,1,0,0,0,9,0,220,36,12,1], borderColor:'blue', fill:false },
+          { label:'Update-Fail',    data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], borderColor:'red', fill:false },
+          { label:'Select-Success', data:[0,200,400,600,800,1000,240,1091,409,236,34,553,4,4,471,49,35,0,76,29,5,6,52,0,61,0,0,0,0,0,4,0,2,0,0,0,7,0,169,37,20,5], borderColor:'orange', fill:false },
+          { label:'Select-Fail',    data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], borderColor:'brown', fill:false }
+        ]
+      },
+      options:{
+        responsive:true,
+        interaction:{mode:'index',intersect:false},
+        plugins:{title:{display:true,text:'DB Ops per-Second Rate'}},
+        scales:{y:{beginAtZero:true,title:{display:true,text:'Ops/sec'}}}
+      }
+    });
+  </script>
+</body></html>

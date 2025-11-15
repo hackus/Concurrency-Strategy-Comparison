@@ -79,9 +79,9 @@ public class DbPerformanceSteps {
         sampler = new Sampler();
     }
 
-    @Given("the H2 database {} is initialized")
-    public void setupDb(String databaseName) {
-        report.startReport();
+    @Given("the H2 database {} is initialized and {string} as report path")
+    public void setupDb(String databaseName, String reportPath) {
+        report.startReport(reportPath);
 
         cleanupH2File();
         prerequisites();
@@ -102,8 +102,8 @@ public class DbPerformanceSteps {
         log.info("✅ H2 database initialized with 'users' table");
     }
 
-    @When("I run performance tests with {int} concurrent users and {dbManager} strategy")
-    public void runPerformance(int totalUsers, Class<? extends DBManager> dbManagerClass)
+    @When("I run performance tests with {int} concurrent users and {dbManager} strategy and {string} as report path")
+    public void runPerformance(int totalUsers, Class<? extends DBManager> dbManagerClass, String reportPath)
         throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InterruptedException {
 
         normalizedTestName = normalizeFilename("run performance with " + dbManagerClass.getSimpleName());
@@ -265,9 +265,7 @@ public class DbPerformanceSteps {
 
         combinedLatencySeries = new CombinedLatencySeries(sampler.insertLatencySampleSeries, sampler.updateLatencySampleSeries, sampler.selectLatencySampleSeries);
 
-//        String normalizedTestName = normalizeFilename("Run test " + dbManagerClass.getSimpleName());
-
-        report.writeReport(normalizedTestName, reportData, timeSeries, timeSeriesSystemLoad, combinedLatencySeries);
+        report.writeReport(reportPath, normalizedTestName, reportData, timeSeries, timeSeriesSystemLoad, combinedLatencySeries);
     }
 
     @Then("the average {} response time should be under {int} ms and percentage of failed less than {double} percent")

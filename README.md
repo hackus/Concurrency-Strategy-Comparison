@@ -38,6 +38,8 @@ I was curious whether I could test Scala in the same way — and it turns out I 
 I should mention that the code was generated with ChatGPT’s help; I don’t yet have enough experience with ZIO or Cats Effect to write it entirely on my own.
 If anyone is able to improve it, you’re more than welcome to jump in.
 
+I had to separate ZIO and Cats Effect runs as I observed ZIO interfered into Cats Effect and was deteriorating both statistics. Now I am running them separately until I will find a solution for it. 
+
 Each model runs identical workloads — such as database I/O, PDF parsing, and simulated thread-sleep tasks — to compare performance, scalability, and development complexity.
 The goal is to understand trade-offs between simplicity, control, and scalability — and to help developers choose the right concurrency tool for their workload.
 
@@ -89,17 +91,17 @@ Regarding ZIO and Cats Effect: both behaved stably with no failures. Cats Effect
 ZIO appears well-balanced—likely using a round-robin–like scheduling approach where the slowest fiber can influence the overall throughput.
 Cats Effect, on the other hand, seems to struggle toward the end of the run.
 
-[ZIO latency →](reports/db/performance-latencyrun_performance_with_ZioDBManager.html)
+[ZIO latency →](reports/db/zio/performance-latencyrun_performance_with_ZioDBManager.html)
 
-[Cats Effect latency →](reports/db/performance-latencyrun_performance_with_CatsDBManager.html)
+[Cats Effect latency →](reports/db/cats/performance-latencyrun_performance_with_CatsDBManager.html)
 
 So, contrary to common expectations, the “million fibers” capability in Scala doesn’t necessarily translate into superior performance. In my tests, neither ZIO nor Cats Effect outperformed RxJava. It feels like a significant portion of CPU time goes into state checking rather than executing the actual tasks.
 
 That said, ZIO and Cats Effect are far more debuggable, while debugging RxJava remains notoriously difficult.
 
-[ZIO pass rate →](reports/db/performance-chart-run_performance_with_ZioDBManager.html)
+[ZIO pass rate →](reports/db/zio/performance-chart-run_performance_with_ZioDBManager.html)
 
-[Cats Effect pass rate →](reports/db/performance-chart-run_performance_with_CatsDBManager.html)
+[Cats Effect pass rate →](reports/db/cats/performance-chart-run_performance_with_CatsDBManager.html)
 
 ## 📉 Full report for db access
 [DB performance full report →](reports/db/performance-report.html)
@@ -110,6 +112,12 @@ That said, ZIO and Cats Effect are far more debuggable, while debugging RxJava r
 ## 📉 Sleep strategy
 [Task simulator hard sleep report →](reports/sleep_strategy/Run_performance_with_hard_sleep_strategy.html)
 [Task simulator soft sleep report →](reports/sleep_strategy/Run_performance_with_soft_sleep_strategy.html)
+
+## 📉 Full ZIO Effect report
+[ZIO full report →](reports/db/zio/performance-report.html)
+
+## 📉 Full Cats Effect report
+[Cats effect full report →](reports/db/cats/performance-report.html)
 
 ## Project link
 [Here →](https://github.com/hackus/ConcurencyStrategyComparison)

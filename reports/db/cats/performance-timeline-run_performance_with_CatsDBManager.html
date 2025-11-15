@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8"/>
+  <title>DB Performance Timeline</title>
+  <style>body{font-family:Arial;padding:16px}.container{max-width:1100px;margin:0 auto}</style>
+</head><body>
+  <div class="container">
+    <h2>Cumulative Success/Fail Over Time (per second)</h2>
+    <canvas id="line" width="1000" height="420"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const labels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37];
+
+    const data = {
+      labels,
+      datasets: [
+        { label: 'Insert - Success', data: [0,200,600,1200,2000,3000,4200,5600,7200,8606,10245,11661,13806,14186,15403,16038,16814,16814,18125,18125,18447,18928,19671,19671,20060,20109,21682,21821,21821,22013,22013,22019,22019,22167,22172,22195,22195,22196], fill:false, tension:0.1 },
+        { label: 'Insert - Fail',    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], fill:false, tension:0.1 },
+        { label: 'Update - Success', data: [0,200,600,1200,2000,3000,4200,5600,7200,8121,9312,10441,11169,11339,11687,11694,11735,11735,12290,12290,12321,12328,12556,12557,12582,12582,12694,12694,12694,12694,12694,12694,12694,13025,13026,13038,13038,13038], fill:false, tension:0.1 },
+        { label: 'Update - Fail',    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], fill:false, tension:0.1 },
+        { label: 'Select - Success', data: [0,200,600,1200,2000,3000,4200,5600,7200,8248,9232,10544,11161,11242,11570,11644,11710,11710,11985,11985,12023,12036,12405,12408,12446,12455,12503,12503,12503,12503,12503,12503,12503,13017,13017,13045,13045,13045], fill:false, tension:0.1 },
+        { label: 'Select - Fail',    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], fill:false, tension:0.1 }
+      ]
+    };
+
+    new Chart(document.getElementById('line').getContext('2d'), {
+      type: 'line',
+      data,
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        stacked: false,
+        plugins: { title: { display: true, text: 'Cumulative Results By Second' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+</body></html>

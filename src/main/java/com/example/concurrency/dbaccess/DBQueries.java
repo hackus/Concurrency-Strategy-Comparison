@@ -12,7 +12,7 @@ import java.util.Optional;
 @Slf4j
 public class DBQueries {
 
-    static Optional<UserInfo> insertUser(Long index, String name, HikariDataSource dataSource) {
+    public static Optional<UserInfo> insertUser(Long index, String name, HikariDataSource dataSource) {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id, name) VALUES (?, ?)")) {
             ps.setLong(1, index);
@@ -25,7 +25,7 @@ public class DBQueries {
         return Optional.empty();
     }
 
-    static Optional<UserInfo> updateUser(long id, String name, HikariDataSource dataSource) {
+    public static Optional<UserInfo> updateUser(long id, String name, HikariDataSource dataSource) {
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement("UPDATE users SET name = ? WHERE id = ?")) {
@@ -40,7 +40,7 @@ public class DBQueries {
         return Optional.empty();
     }
 
-    static Optional<UserInfo> selectUser(long id, HikariDataSource dataSource) {
+    public static Optional<UserInfo> selectUser(long id, HikariDataSource dataSource) {
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement("Select id, name FROM users WHERE id = ?")) {

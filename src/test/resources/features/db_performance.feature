@@ -13,3 +13,5 @@ Feature: Database performance testing
       | VirtualThreads          | 200            | 1000           | 700            | 0.02              |
       | CompletableFuture       | 200            | 1000           | 700            | 0.02              |
       | ReactiveRxJavaDBManager | 200            | 1000           | 700            | 0.02              |
+      | ZioDBManager            | 200            | 1000           | 700            | 0.02              |
+      | CatsDBManager           | 200            | 1000           | 700            | 0.02              |

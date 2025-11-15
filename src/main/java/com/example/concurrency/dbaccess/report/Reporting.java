@@ -20,11 +20,11 @@ import static com.example.concurrency.dbaccess.report.ReportHelper.computeDeltas
 public class Reporting {
     private static ExtentReports extent;
 
-    private static void startExtentReports() {
+    private static void startExtentReports(String reportPath) {
         if (extent == null) {
             synchronized (Reporting.class) {
                 if (extent == null) {
-                    ExtentSparkReporter spark = new ExtentSparkReporter("reports/db/performance-report.html");
+                    ExtentSparkReporter spark = new ExtentSparkReporter(reportPath + "/performance-report.html");
                     extent = new ExtentReports();
                     extent.attachReporter(spark);
                 }
@@ -35,8 +35,8 @@ public class Reporting {
 //    private final ExtentReports extent = new ExtentReports();
     private final Map<String, ExtentTest> testMap = new HashMap<>();
 
-    public void startReport() {
-        startExtentReports();
+    public void startReport(String reportPath) {
+        startExtentReports(reportPath);
 //        ExtentSparkReporter reporter = new ExtentSparkReporter("build/reports/performance-report.html");
 //        extent.attachReporter(reporter);
     }
@@ -51,6 +51,7 @@ public class Reporting {
     }
 
     public void writeReport(
+        String reportPath,
         String testName,
         Map<String, reactor.util.function.Tuple2<Long, Long>> summary,
         Map<String, java.util.List<Long>> timeSeries,
@@ -75,7 +76,8 @@ public class Reporting {
         String performanceLatencyChartName = "performance-latency" + testName + ".html";
 
         // Write both files
-        java.nio.file.Path dir = java.nio.file.Path.of("reports/db");
+//        java.nio.file.Path dir = java.nio.file.Path.of("/reports/db");
+        java.nio.file.Path dir = java.nio.file.Path.of(reportPath);
         try {
             java.nio.file.Files.createDirectories(dir);
             java.nio.file.Files.writeString(dir.resolve(performanceChartName), summaryHtml, java.nio.charset.StandardCharsets.UTF_8);

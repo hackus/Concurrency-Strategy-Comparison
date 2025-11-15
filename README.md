@@ -140,6 +140,7 @@ That said, ZIO and Cats Effect are far more debuggable, while debugging RxJava r
 | **Best for**                    | Simple async         | Chained async ops     | Blocking-style concurrent I/O | Event-driven data flows       | WebFlux, reactive pipelines   | Typed effects, structured concurrency        | Functional IO, controlled parallelism         |
 
 ## 🧮 Max average latency benchmark Summary
+
 | Test                          | Future  | CompletableFuture | Virtual Threads | RxJava  | Reactor  | ZIO  | Cats Effect |
 |-------------------------------|---------|---------------|-----------------|---------|----------|------|-------------|
 | 🧠 TaskSimulator (1000 tasks) | 1121 ms | 1097 ms       | 1084 ms         | 8291 ms | 10675 ms | N/A  | N/A         |

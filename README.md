@@ -98,9 +98,11 @@ Cats Effect, on the other hand, seems to struggle toward the end of the run.
 
 [Cats Effect latency →](reports/db/cats/performance-latencyrun_performance_with_CatsDBManager.html)
 
-So, contrary to common expectations, the “million fibers” capability in Scala doesn’t necessarily translate into superior performance. In my tests, neither ZIO nor Cats Effect outperformed RxJava. It feels like a significant portion of CPU time goes into state checking rather than executing the actual tasks.
+So, contrary to popular belief, Scala’s “million fibers” capability isn’t actually real. In my benchmarks, neither ZIO nor Cats Effect managed to outperform RxJava. However, once I switched ZIO from a fire-and-forget style (essentially Async) to runSync, its performance matched RxJava—though RxJava remains a notoriously hard-to-debug stream, while ZIO is much easier to inspect.
 
-That said, ZIO and Cats Effect are far more debuggable, while debugging RxJava remains notoriously difficult.
+Overall, Scala frameworks seem to spend a noticeable amount of CPU time on state management rather than on executing the actual work.
+
+That said, ZIO and Cats Effect offer significantly better debuggability, whereas debugging RxJava continues to be a painful experience.
 
 [ZIO pass rate →](reports/db/zio/performance-chart-run_performance_with_ZioDBManager.html)
 
@@ -145,19 +147,19 @@ That said, ZIO and Cats Effect are far more debuggable, while debugging RxJava r
 
 ## 🧮 Max average latency benchmark Summary
 
-| Test                          | Future  | CompletableFuture | Virtual Threads | RxJava  | Reactor  | ZIO  | Cats Effect |
-|-------------------------------|---------|---------------|-----------------|---------|----------|------|-------------|
-| 🧠 TaskSimulator (1000 tasks) | 1121 ms | 1097 ms       | 1084 ms         | 8291 ms | 10675 ms | N/A  | N/A         |
-| 📄 PDF Reader (multi-page)    | 3101 ms | 1509 ms       | 1524 ms         | 1885 ms | N/A      | N/A  | N/A         |
-| 🗄️ DB  (HikariCP)            | N/A     | ~21 ms        | ~18177 ms       | 8 ms | N/A      | 5583 | 56733       |
+| Test                          | Future  | CompletableFuture | Virtual Threads | RxJava  | Reactor  | ZIO    | Cats Effect |
+|-------------------------------|---------|-------------------|-----------------|---------|----------|--------|-------------|
+| 🧠 TaskSimulator (1000 tasks) | 1121 ms | 1097 ms           | 1084 ms         | 8291 ms | 10675 ms | N/A    | N/A         |
+| 📄 PDF Reader (multi-page)    | 3101 ms | 1509 ms           | 1524 ms         | 1885 ms | N/A      | N/A    | N/A         |
+| 🗄️ DB  (HikariCP)            | N/A     | ~23 ms            | ~18177 ms       | 9.7 ms  | N/A      | 5.8 ms | 19979 ms    |
 
 For the TaskSimulator Future's and CompletableFuture's values are taken from the tuned implementations.
 For DB values taken are max between insert, update and delete.
 
 ### My opinion
 
-I don’t yet have enough experience to make a definitive comparison, but so far RxJava feels noticeably more complex than ZIO or Cats Effect—although also significantly faster.
-That said, in my personal opinion, nothing compares to Completable Future.
+I don’t yet have enough experience to make a definitive comparison, but so far RxJava feels noticeably more complex than ZIO or Cats Effect—although it is generally significantly faster, except ZIO’s runSync, which performs on par with it.
+From my perspective, nothing really matches CompletableFuture: it remains the fastest, most flexible, and easiest option among all the frameworks I’ve tried.
 
 ## 🧱 Project Structure
 

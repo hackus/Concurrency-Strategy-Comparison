@@ -159,7 +159,7 @@ For DB values taken are max between insert, update and delete.
 ### My opinion
 
 I don’t yet have enough experience to make a definitive comparison, but so far RxJava feels noticeably more complex than ZIO or Cats Effect—although it is generally significantly faster, except ZIO’s runSync, which performs on par with it.
-From my perspective, nothing really matches CompletableFuture: it remains the fastest, most flexible, and easiest option among all the frameworks I’ve tried.
+From my perspective, nothing really matches CompletableFuture: it is enough fastest, most flexible, and easiest option among all the frameworks I’ve tried.
 
 ## 🧱 Project Structure
 
